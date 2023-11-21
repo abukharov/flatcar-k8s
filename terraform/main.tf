@@ -57,10 +57,10 @@ module "workers" {
 resource "opnsense_dhcp_static_map" "node_dhcp_map" {
   interface = var.opnsense_iface
 
-  for_each = concat(module.masters, module.workers)
-  mac = each.value.*.mac-address
-  ipaddr = each.value.*.ip_address
-  hostname = each.value.*.hostname
+  for_each = merge(module.masters, module.workers)
+  mac = each.value.mac_address
+  ipaddr = each.value.ip_address
+  hostname = each.value.hostname
 }
 
 resource "local_file" "inventory" {

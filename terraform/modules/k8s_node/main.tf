@@ -1,3 +1,7 @@
+resource "macaddress" "guest_mac" {
+  prefix = [50, 214, 208]
+}
+
 data "ignition_user" "cluster_user" {
   name = "core"
 
@@ -54,6 +58,7 @@ resource "esxi_guest" "esxi_vm" {
 
   network_interfaces {
     virtual_network = var.node_vnet
+    mac_address = macaddress.guest_mac.address
   }
 
   connection {
@@ -99,5 +104,5 @@ output "ip_address" {
 
 output "mac_address" {
   description = "MAC address of the node"
-  value = esxi_guest.esxi_vm.mac_address
+  value = macaddress.guest_mac.address
 }
