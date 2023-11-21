@@ -21,6 +21,45 @@ provider "registry.terraform.io/community-terraform-providers/ignition" {
   ]
 }
 
+provider "registry.terraform.io/gxben/opnsense" {
+  version = "0.3.0"
+  hashes = [
+    "h1:DJNvOibyIBqUIExfsBbMV0ZxZLIomRqydR/kj66CxlA=",
+    "zh:2845e52a254b0c805acc2222db711d29c9a382f8b7ecb9c064dd2f0a71abf1c2",
+    "zh:3835fbdc1ef0946c635a6e16e249402c2179d3cf953f597d4cbf20911c4f57c1",
+    "zh:631f8c17ee2ba8572f0373d13fd1c1d4eb7dcf8d652d452c26800c63fa303c3f",
+    "zh:773226ce703502d57a7450af321c98dc56779686bf5e9fce4f892ef5aa98f3bc",
+    "zh:a5cb29912768bc4bf5cfc7c974d26be05f8f7291f021cd04822b17c73d6eb088",
+    "zh:b51469a69139c993a0c7744eed3bbe4ffb576a7a4c5544f01b26d496f59386f4",
+    "zh:c6b81be0fc16918b932a991d7a21f0bc9ab7f240ebbf67a9e944168e3b68e3e1",
+    "zh:d59a785495835d312c3a7645b39d5e72eacf760e81cfd62ed0797f631695b4f7",
+    "zh:d77cfcb49973d776a339f5e76d551a26d1397068b06307e19ea412b93ab1886d",
+    "zh:d9532288d78ed2b3af9c76df1ecf96036916f2665d3a5e7c168ac78e2db0085a",
+    "zh:de7df6fdc792f9f4111e52ad46cdc5ddb5cef3dc2a9e62f901f88c122c1cf967",
+    "zh:e80e08490db2058873425ca9ed693c5d774fb37a8cd96151a9dc50c7aeb2b750",
+    "zh:f348c9559c9dbf10e213c3dcc57a455829e48087312dcad05337b4a7afa39ed7",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/local" {
+  version = "2.4.0"
+  hashes = [
+    "h1:R97FTYETo88sT2VHfMgkPU3lzCsZLunPftjSI5vfKe8=",
+    "zh:53604cd29cb92538668fe09565c739358dc53ca56f9f11312b9d7de81e48fab9",
+    "zh:66a46e9c508716a1c98efbf793092f03d50049fa4a83cd6b2251e9a06aca2acf",
+    "zh:70a6f6a852dd83768d0778ce9817d81d4b3f073fab8fa570bff92dcb0824f732",
+    "zh:78d5eefdd9e494defcb3c68d282b8f96630502cac21d1ea161f53cfe9bb483b3",
+    "zh:82a803f2f484c8b766e2e9c32343e9c89b91997b9f8d2697f9f3837f62926b35",
+    "zh:9708a4e40d6cc4b8afd1352e5186e6e1502f6ae599867c120967aebe9d90ed04",
+    "zh:973f65ce0d67c585f4ec250c1e634c9b22d9c4288b484ee2a871d7fa1e317406",
+    "zh:c8fa0f98f9316e4cfef082aa9b785ba16e36ff754d6aba8b456dab9500e671c6",
+    "zh:cfa5342a5f5188b20db246c73ac823918c189468e1382cb3c48a9c0c08fc5bf7",
+    "zh:e0e2b477c7e899c63b06b38cd8684a893d834d6d0b5e9b033cedc06dd7ffe9e2",
+    "zh:f62d7d05ea1ee566f732505200ab38d94315a4add27947a60afa29860822d3fc",
+    "zh:fa7ce69dde358e172bd719014ad637634bbdabc49363104f4fca759b4b73f2ce",
+  ]
+}
+
 provider "registry.terraform.io/josenk/esxi" {
   version     = "1.10.3"
   constraints = "~> 1.10.0"

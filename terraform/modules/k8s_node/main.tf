@@ -1,20 +1,37 @@
-provider "esxi" {
-  esxi_hostname = var.esxi_hostname
-  esxi_hostport = var.esxi_hostport
-  esxi_hostssl  = var.esxi_hostssl
-  esxi_username = var.esxi_username
-  esxi_password = var.esxi_password
-}
-
 data "ignition_user" "cluster_user" {
   name = "core"
 
-  ssh_authorized_keys = [file(var.ssh_pubkey)]
+  ssh_authorized_keys = [file(var.node_ssh_pubkey)]
+}
+
+data "ignition_file" "etc_hostname" {
+  path = "/etc/hostname"
+  content {
+    content = "${var.node_hostname}\n"
+  }
+}
+
+data "ignition_file" "networkd_config" {
+  path = "/etc/systemd/network/00-dhcp-en.network"
+  content {
+    content = <<EOF
+[Match]
+Name=en*
+[Network]
+DHCP=yes
+SendHostname=yes
+Hostname=${var.node_hostname}
+EOF
+  }
 }
 
 data "ignition_config" "coreos" {
   users = [
     data.ignition_user.cluster_user.rendered,
+  ]
+
+  files = [
+    data.ignition_file.etc_hostname.rendered,
   ]
 }
 
@@ -25,15 +42,15 @@ resource "esxi_guest" "esxi_vm" {
   guestos            = "other5xlinux-64"
   virthwver          = 19
   power              = "on"
-  memsize            = "2048"
-  numvcpus           = "2"
+  memsize            = var.node_memory
+  numvcpus           = var.node_cpus
 
   guestinfo = {
     "coreos.config.data.encoding" = "base64"
     "coreos.config.data" = base64encode(data.ignition_config.coreos.rendered)
   }
 
-  ovf_source         = "../images/flatcar_production_vmware_ova.ova"
+  ovf_source         = var.node_ova_file
 
   network_interfaces {
     virtual_network = var.node_vnet
@@ -43,19 +60,44 @@ resource "esxi_guest" "esxi_vm" {
     host        = self.ip_address
     type        = "ssh"
     user        = "core"
-    private_key = file(var.ssh_privkey)
+    private_key = file(var.node_ssh_privkey)
     timeout     = "180s"
+  }
+
+  provisioner "file" {
+    destination = "/tmp/hosts.tmp"
+    content     = templatefile("${path.module}/templates/hosts.tftpl", {
+      ipaddress = esxi_guest.esxi_vm.ip_address
+      hostname = var.node_hostname,
+      domainname = var.node_domainname,
+    })
   }
 
   provisioner "remote-exec" {
     inline = [
-      "timedatectl set-timezone Australia/Melbourne",
+      "sudo timedatectl set-timezone Australia/Melbourne",
+      "sudo cp /tmp/hosts.tmp /etc/hosts",
     ]
   }
 
 }
 
+output "hostname" {
+  description = "Hostname of the node"
+  value = var.node_hostname
+}
+
+output "fqdn" {
+  description = "FQDN of the node"
+  value = "${var.node_hostname}.${var.node_domainname}"
+}
+
 output "ip_address" {
   description = "IP address of the node"
   value = esxi_guest.esxi_vm.ip_address
+}
+
+output "mac_address" {
+  description = "MAC address of the node"
+  value = esxi_guest.esxi_vm.mac_address
 }
